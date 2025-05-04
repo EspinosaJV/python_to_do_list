@@ -1,5 +1,31 @@
+import glob # module for looking for files matching a pattern
+
+# function that handles display of .txt files
 def viewTasks():
-    print("You will now be viewing tasks!")
+    print("\n******************************")
+    print("You will now be viewing tasks!\n")
+
+    # acquires all .txt files in project repository
+    taskFiles = glob.glob('**/*.txt', recursive=True)
+
+    # displays all .txt files to console
+    for index,task in enumerate(taskFiles):
+        if index == (len(taskFiles)-1):
+            print(f"{index+1}. {task}\n")
+            break
+        print(f"{index+1}. {task}")
+
+    # prompts user to decide to go back to main menu or not
+    print("Return to main menu? (Y/N)")
+    userChoice = input().strip().lower()
+    if userChoice == 'y':
+        # returns to main function
+        main()
+    elif userChoice == 'n':
+        print("Alright, thank you!")
+    else:
+        print("Please input appropriately.")
+        viewTasks()
 
 # function that handles creation of .txt files
 def addTasks():
