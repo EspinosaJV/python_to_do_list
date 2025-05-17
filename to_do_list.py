@@ -15,17 +15,20 @@ def viewTasks():
             break
         print(f"{index+1}. {task}")
 
-    # prompts user to decide to go back to main menu or not
-    print("Return to main menu? (Y/N)")
-    userChoice = input().strip().lower()
-    if userChoice == 'y':
-        # returns to main function
-        main()
-    elif userChoice == 'n':
-        print("Alright, thank you!")
-    else:
-        print("Please input appropriately.")
-        viewTasks()
+    print("Which task would you like to specifically view? (Input the number)")
+    while True:
+        try:
+            userChoice = int(input())
+            taskChoice = taskFiles[userChoice]
+            with open(taskChoice, 'r') as file:
+                contents = file.read()
+                print(contents)
+                print("---------------------------------------")
+                userChoice = input("Press any key to continue.")
+            main()
+        except:
+            print("Please input appropriately.")
+            main()
 
 # function that handles creation of .txt files
 def addTasks():
