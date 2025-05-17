@@ -16,19 +16,18 @@ def viewTasks():
         print(f"{index+1}. {task}")
 
     print("Which task would you like to specifically view? (Input the number)")
-    while True:
-        try:
-            userChoice = int(input())
-            taskChoice = taskFiles[userChoice]
-            with open(taskChoice, 'r') as file:
-                contents = file.read()
-                print(contents)
-                print("---------------------------------------")
-                userChoice = input("Press any key to continue.")
-            main()
-        except:
-            print("Please input appropriately.")
-            main()
+    try:
+        userChoice = int(input())
+        taskChoice = taskFiles[userChoice - 1]
+        with open(taskChoice, 'r') as file:
+            contents = file.read()
+            print(contents)
+            print("---------------------------------------")
+            userChoice = input("Press any key to continue.")
+        main()
+    except:
+        print("Please input appropriately.")
+        main()
 
 # function that handles creation of .txt files
 def addTasks():
@@ -64,7 +63,67 @@ def addTasks():
     main()
 
 def editTasks():
+    print("\n******************************")
     print("You will now be editing tasks!")
+
+    # acquires all .txt files in project repo
+    taskFiles = glob.glob('**/*.txt', recursive=True)
+
+    # displays list of .txt files to console
+    for index, task in enumerate(taskFiles):
+        if index == (len(taskFiles)-1):
+            print(f"{index+1}. {task}\n")
+            break
+        print(f"{index+1}. {task}")
+
+    # displays contents of chosen text file before continuing
+    print("Which task would you like to specifically edit? (Input the number)")
+    try:
+        userChoice = int(input())
+        taskChoice = taskFiles[userChoice - 1]
+        with open(taskChoice, 'r') as file:
+            contents = file.read()
+            print(contents)
+            print("---------------------------------")
+    except:
+        print("Please input appropriately.")
+        main()
+
+    try:
+        print("Would you like to 1. Add to the content or 2. Edit a specific line? (Input the number)")
+        userChoice = int(input())
+        if userChoice == 1:
+            print("You have chosen to append to the file.")
+            with open(taskChoice, "a+") as file:
+                file.seek(0)
+                lines = file.readlines()
+                lineCount = len(lines)
+                print(lineCount)
+                print("Please input the individual task that you would like to add.")
+                userInput = input()
+                file.write(f"{lineCount + 1}. {userInput}\n")
+            main()
+        elif userChoice == 2:
+            print("You have chosen to edit the contents of the file.")
+            print("Please input the number of the specific task you wish to edit.")
+            chosenTask = int(input())
+            with open(taskChoice, "r") as file:
+                tasks = file.readlines()
+                taskCount = len(tasks)
+                if chosenTask > taskCount:
+                    print("Please input an appropriate value.")
+                    main()
+            print("Please input the new task to place in-line with the chosen number.")
+            taskInput = input()
+            tasks[chosenTask - 1] = f"{chosenTask}. {taskInput}\n"
+            with open(taskChoice, "w") as file:
+                file.writelines(tasks)
+            main()
+        else:
+            print("Please input appropriately.")
+            main()
+    except:
+        main()
 
 def deleteTasks():
     print("You will now be deleting tasks!")
