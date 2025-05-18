@@ -1,4 +1,5 @@
 import glob # module for looking for files matching a pattern
+import os # module handling file management
 
 # function that handles display of .txt files
 def viewTasks():
@@ -62,6 +63,7 @@ def addTasks():
     # back to main function
     main()
 
+# function that handles editing of specific lines in the .txt files
 def editTasks():
     print("\n******************************")
     print("You will now be editing tasks!")
@@ -125,8 +127,36 @@ def editTasks():
     except:
         main()
 
+# function that handles deletion of .txt files
 def deleteTasks():
+    print("\n******************************")
     print("You will now be deleting tasks!")
+
+    # acquires all .txt files in project repository
+    taskFiles = glob.glob('**/*.txt', recursive=True)
+
+    # displays all .txt files to console
+    for index,task in enumerate(taskFiles):
+        if index ==  (len(taskFiles)-1):
+            print(f"{index+1}. {task}\n")
+            break
+        print(f"{index+1}. {task}")
+
+    # prompt user as to what task to delete
+    print("Which task would you like to specifically delete? (Input the number)")
+    try:
+        userChoice = int(input())
+        taskChoice = taskFiles[userChoice - 1]
+        if os.path.exists(taskChoice):
+            os.remove(taskChoice)
+            print("Task file has been successfully removed.")
+            main()
+        else:
+            print("Please input appropriately.")
+            main()
+    except:
+        print("Please input appropriately.")
+        main()
 
 def main():
     print("Welcome to the To-Do-List Python Application.")
